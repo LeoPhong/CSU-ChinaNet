@@ -122,8 +122,11 @@ def getIPAddress():
 def getConnectionInfo():
     request_handler = requests.head('http://www.baidu.com')
     status_code = request_handler.status_code
-    location = request_handler.headers['Location']
-    bras_address = location[location.rfind('/bas.')+len('/bas.'):location.rfind('?')]
-    user_ip = location[location.rfind('wlanuserip=')+len('wlanuserip='):location.rfind('&')]
-    return (status_code,bras_address,user_ip)
+    try:
+        location = request_handler.headers['Location']
+        bras_address = location[location.rfind('/bas.')+len('/bas.'):location.rfind('?')]
+        user_ip = location[location.rfind('wlanuserip=')+len('wlanuserip='):location.rfind('&')]
+        return (status_code,bras_address,user_ip)
+    except:
+        return (status_code,None,None)
 
