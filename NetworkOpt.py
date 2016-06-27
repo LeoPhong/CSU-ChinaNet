@@ -1,45 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import getpass
-import argparse
 import urllib.request
 import urllib.parse
 import platform
 import os
 import re
-
-
-base = [str(x) for x in range(10)] + [ chr(x) for x in range(ord('A'),ord('A')+6)]
-
-def dec2bin(string_num):
-    num = int(string_num)
-    mid = []
-    while True:
-        if num == 0: break
-        num,rem = divmod(num, 2)
-        mid.append(base[rem])
-    result =  ''.join([str(x) for x in mid[::-1]])
-    while len(result)<8:
-        result = "0"+result
-    return result
-def dec2hex(string_num):
-    num = int(string_num)
-    mid = []
-    while True:
-        if num == 0: break
-        num,rem = divmod(num, 16)
-        mid.append(base[rem])
-    return ''.join([str(x) for x in mid[::-1]])
-
-
-def encrypted_pwd(pwd):
-    n = 118412968095593089696003595256943158860853473161415576733447804842301571568757172298177752975532992898222036246641653221445506569501197901613520593964333398062725892226386301624234776784458736053884120766450015009923516265683635605497451865069151546715184399574358971886504430854133607074276246210978427253829
-    e = 65537
-    pwd = str(pwd)[::-1]
-    pwd_ascii_list = map(lambda x:ord(x),pwd)
-    bin_chain_pwd = ''.join(dec2bin(x) for x in pwd_ascii_list)
-    return dec2hex(pow(int(bin_chain_pwd,2),e,n)).lower()
+import requests
 
 
 def login(user_name, password_encrpyted, brasAddress, userIntranetAddress):
@@ -152,27 +119,11 @@ def getIPAddress():
         print('未知系统,请手动输入IP地址!')
 
 
+def getConnectionInfo():
+    request_handler = requests.head('http://www.baidu.com')
+    status_code = request_handler.status_code
+    location = request_handler.headers['Location']
+    bras_address = location[location.rfind('/bas.')+len('/bas.'):location.rfind('?')]
+    user_ip = location[location.rfind('wlanuserip=')+len('wlanuserip='):location.rfind('&')]
+    return (status_code,bras_address,user_ip)
 
-
-if __name__ == "__main__":
-    brasAddress = '59df7586'
-
-    parser = argparse.ArgumentParser(description = '跨平台数字中南客户端')
-    parser.add_argument('-u' , '--usr' , help = '用户名')
-    parser.add_argument('-p' , '--pas' , help = '密码')
-    parser.add_argument('-o' , '--logout' , help = '注销' , action='store_false' , default = True , dest = 'action')
-    parser.add_argument('-i' , '--ip' , help = '自定义IP')
-    args = parser.parse_args()
-    user_ip = args.ip if args.ip else getIPAddress()
-    print('获取IP为 : %s' % user_ip)
-    if args.action:
-        if not args.usr or not args.pas:
-            print('请输入用户名和密码!!!')
-            sys.exit()
-        print('正在登录...')
-        user_name = args.usr
-        password = '0' + encrypted_pwd(args.pas)
-        login(user_name, password, brasAddress,user_ip)
-    else:
-        print('正在注销...')
-        logout(brasAddress,user_ip)
