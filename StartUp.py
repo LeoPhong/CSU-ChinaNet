@@ -10,10 +10,9 @@ import Encryption
 if __name__ == "__main__":
     user_id = input('请输入帐号：')
     user_passwd = '0' + Encryption.encrypted_pwd(input('请输入密码：'))
-    connection_status,bras_address,user_ip = NetworkOpt.getConnectionInfo()
     try:
         while(True):
-            connection_status,None,None = NetworkOpt.getConnectionInfo()
+            connection_status,bras_address,user_ip = NetworkOpt.getConnectionInfo()
             if connection_status == 302:
                 print('正在登录...')
                 NetworkOpt.login(user_id,user_passwd,bras_address,user_ip)
