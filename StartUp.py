@@ -9,7 +9,7 @@ import Encryption
 
 if __name__ == "__main__":
     user_id = input('请输入帐号：')
-    user_passwd = '0' + Encryption.encrypted_pwd(input('请输入密码：'))
+    user_passwd = '0' + Encryption.encrypted_pwd(getpass.getpass('请输入密码：'))
     connection_status,bras_address,user_ip = NetworkOpt.getConnectionInfo()
     try:
         while(True):
