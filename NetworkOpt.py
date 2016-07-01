@@ -27,47 +27,42 @@ def login(user_name, password_encrpyted, brasAddress, userIntranetAddress):
         # 取得帐号信息
         req = urllib.request.Request('http://61.137.86.87:8080/portalNat444/main2.jsp' , headers = {'Cookie' : cookie})
         html = urllib.request.urlopen(req).read().decode()
-        print(re.findall(r'(尊敬的.+用户，您本月截止至.+为止，宽带业务使用情况如下:)' , html)[0])
-        print(re.findall(r'(您的账户本月总流量\(公网\):.+MB)' , html)[0])
-        print(re.findall(r'(您的账户本月已用流量\(公网\):.+MB)' , html)[0])
-        print(re.findall(r'(您的账户本月剩余流量\(公网\):.+MB)' , html)[0])
-        print(re.findall(r'(您的账户本月已用流量（校园网\):.+MB)' , html)[0])
-        print(re.findall(r'(您宽带账户当前剩余金额:.+元)' , html)[0])
+        return (re.findall(r'(尊敬的.+用户，您本月截止至.+为止，宽带业务使用情况如下:)' , html)[0],re.findall(r'(您的账户本月总流量\(公网\):.+MB)' , html)[0],re.findall(r'(您的账户本月已用流量\(公网\):.+MB)' , html)[0],re.findall(r'(您的账户本月剩余流量\(公网\):.+MB)' , html)[0],re.findall(r'(您的账户本月已用流量（校园网\):.+MB)' , html)[0],re.findall(r'(您宽带账户当前剩余金额:.+元)' , html)[0])
     elif data['resultCode'] == '1':
         if data['resultDescribe'] == None or data['resultDescribe'] == '':
-            print('其他原因认证拒绝')
+            return ('其他原因认证拒绝',)
         else:
-            print(data['resultDescribe'])
+            return (data['resultDescribe'],)
     elif data['resultCode'] == '2':
-        print('用户连接已存在')
+        return ('用户连接已存在',)
     elif data['resultCode'] == '3':
-        print('接入服务器繁忙, 稍后重试')
+        return ('接入服务器繁忙, 稍后重试',)
     elif data['resultCode'] == '4':
-        print('未知错误')
+        return ('未知错误',)
     elif data['resultCode'] == '6':
-        print('认证响应超时')
+        return ('认证响应超时',)
     elif data['resultCode'] == '7':
-        print('捕获用户网络地址错误')
+        return ('捕获用户网络地址错误',)
     elif data['resultCode'] == '8':
-        print('服务器网络连接异常')
+        return ('服务器网络连接异常',)
     elif data['resultCode'] == '9':
-        print('认证服务脚本执行异常')
+        return ('认证服务脚本执行异常',)
     elif data['resultCode'] == '10':
-        print('校验码错误')
+        return ('校验码错误',)
     elif data['resultCode'] == '11':
-        print('您的密码相对简单，帐号存在被盗风险，请及时修改成强度高的密码')
+        return ('您的密码相对简单，帐号存在被盗风险，请及时修改成强度高的密码',)
     elif data['resultCode'] == '12':
-        print('无法获取您的网络地址,请输入任意其它网站从网关处导航至本认证页面')
+        return ('无法获取您的网络地址,请输入任意其它网站从网关处导航至本认证页面',)
     elif data['resultCode'] == '13':
-        print('无法获取您接入点设备地址，请输入任意其它网站从网关处导航至本认证页面')
+        return ('无法获取您接入点设备地址，请输入任意其它网站从网关处导航至本认证页面',)
     elif data['resultCode'] == '14':
-        print('无法获取您套餐信息')
+        return ('无法获取您套餐信息',)
     elif data['resultCode'] == '16':
-        print('请输入任意其它网站导航至本认证页面,并按正常PORTAL正常流程认证')
+        return ('请输入任意其它网站导航至本认证页面,并按正常PORTAL正常流程认证',)
     elif data['resultCode'] == '17':
-        print('连接已失效，请输入任意其它网站从网关处导航至本认证页面')
+        return ('连接已失效，请输入任意其它网站从网关处导航至本认证页面',)
     else:
-        print('未知错误')
+        return ('未知错误',)
 
 def logout(brasAddress,userIntranetAddress):
     data = {'brasAddress' : brasAddress ,
@@ -76,27 +71,27 @@ def logout(brasAddress,userIntranetAddress):
     req = urllib.request.Request('http://61.137.86.87:8080/portalNat444/AccessServices/logout?' , data_urlencode.encode() , headers = {'Referer' : 'http://61.137.86.87:8080/portalNat444/main2.jsp'})
     data = eval(urllib.request.urlopen(req).read().decode())
     if data['resultCode'] == '0':
-        print('下线成功')
+        return ('下线成功',)
     elif data['resultCode'] == '1':
-        print('服务器拒绝请求')
+        return ('服务器拒绝请求',)
     elif data['resultCode'] == '2':
-        print('下线请求执行失败')
+        return ('下线请求执行失败',)
     elif data['resultCode'] == '3':
-        print('您已经下线')
+        return ('您已经下线',)
     elif data['resultCode'] == '4':
-        print('服务器响应超时')
+        return ('服务器响应超时',)
     elif data['resultCode'] == '5':
-        print('后台网络连接异常')
+        return ('后台网络连接异常',)
     elif data['resultCode'] == '6':
-        print('服务脚本执行异常')
+        return ('服务脚本执行异常',)
     elif data['resultCode'] == '7':
-        print('无法获取您的网络地址')
+        return ('无法获取您的网络地址',)
     elif data['resultCode'] == '8':
-        print('无法获取您接入点设备地址')
+        return ('无法获取您接入点设备地址',)
     elif data['resultCode'] == '9':
-        print('请输入任意其它网站导航至本认证页面,并按正常PORTAL正常流程认证')
+        return ('请输入任意其它网站导航至本认证页面,并按正常PORTAL正常流程认证',)
     else:
-        print('未知错误')
+        return ('未知错误',)
 
 def getIPAddress():
     if 'Linux' in platform.system() or 'Mac' in platform.system():
