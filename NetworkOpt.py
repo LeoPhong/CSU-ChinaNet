@@ -120,8 +120,11 @@ def getIPAddress():
 
 
 def getConnectionInfo():
-    request_handler = requests.head('http://www.baidu.com')
-    status_code = request_handler.status_code
+    try:
+        request_handler = requests.head('http://www.baidu.com')
+        status_code = request_handler.status_code
+    except:
+        status_code = 400
     try:
         location = request_handler.headers['Location']
         bras_address = location[location.rfind('/bas.')+len('/bas.'):location.rfind('?')]
